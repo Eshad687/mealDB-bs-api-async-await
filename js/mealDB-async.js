@@ -23,7 +23,7 @@ const clear = () => {
     details.textContent = '';
 }
 //getting searched data
-const loadFoods = () => {
+const loadFoods = async () => {
 
     const searchTextField = document.getElementById('search-field');
     const searchText = searchTextField.value;
@@ -40,10 +40,16 @@ const loadFoods = () => {
 
         //we only need the meals. So, passing only the meals property. it is an array
         document.getElementById('spinner').style.display = 'block';
-        fetch(url)
-            .then(res => res.json())
-            .then(data => displayFood(data.meals))
-            .catch(error => errorMessage(error))
+
+        try {
+            const res = await fetch(url);//need to wait
+            const data = await res.json();//need to wait
+            displayFood(data.meals);
+        }
+        catch (error) {
+            errorMessage(error);
+        }
+
 
     }
 
@@ -90,13 +96,19 @@ const displayFood = meals => {
 }
 
 //getting the meal details
-const mealDetails = mealId => {
+const mealDetails = async mealId => {
     const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`
     document.getElementById('spinner').style.display = 'block';
-    fetch(url)
-        .then(res => res.json())
-        .then(data => displayMealDetails(data.meals))
-        .catch(error => errorMessage(error))
+
+    try {
+        const res = await fetch(url);//need to wait
+        const data = await res.json();//need to wait
+        displayMealDetails(data.meals);
+    }
+    catch (error) {
+        errorMessage(error);
+    }
+
 
     //the data gives us an object.and the meals oproperty of the object has an array. the array has only one element . which is an object and the meal information
 }
